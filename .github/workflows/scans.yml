@@ -1,0 +1,14 @@
+name: Scans
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  ECCN-Scan:
+    uses: sede-x/github-cicd-workflows/.github/workflows/eccn-scan.yaml@main
+  SonarQube-Scan:
+    uses: sede-x/github-cicd-workflows/.github/workflows/sonarqube-scan.yaml@main
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
+      sonar_host_url: ${{ secrets.SONAR_HOST_URL }}
