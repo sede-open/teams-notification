@@ -1,14 +1,24 @@
-name: Scans
+name: SonarQube
 
 on:
-  pull_request:
   push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    - cron: '23 3 * * 2'
+  workflow_dispatch:
 
 jobs:
-  ECCN-Scan:
-    uses: sede-x/github-cicd-workflows/.github/workflows/eccn-scan.yaml@main
-  SonarQube-Scan:
-    uses: sede-x/github-cicd-workflows/.github/workflows/sonarqube-scan.yaml@main
-    secrets:
-      sonar_token: ${{ secrets.SONAR_TOKEN }}
-      sonar_host_url: ${{ secrets.SONAR_HOST_URL }}
+  build:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: SonarSource/sonarqube-scan-action@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
